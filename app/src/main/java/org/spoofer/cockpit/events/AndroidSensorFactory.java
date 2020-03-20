@@ -23,18 +23,18 @@ public class AndroidSensorFactory implements EventFactory {
 
     @Override
     public void startListening(String name, EventListener listener) throws IllegalArgumentException {
+        SensorListener listenerWrapper = connected.get(name);
+        if (listenerWrapper != null) {
+            listenerWrapper.listeners.add(listener);
+            return;
+        }
+
         Sensor sensor = getSensor(name);
         if (sensor == null) {
             throw new IllegalArgumentException(String.format("%s is not a known name", name));
         }
-
-        SensorListener listenerWrapper = connected.get(name);
-        if (listenerWrapper == null) {
-            listenerWrapper = new SensorListener(listener);
-            connected.put(name, listenerWrapper);
-        } else {
-            listenerWrapper.listeners.add(listener);
-        }
+        listenerWrapper = new SensorListener(listener);
+        connected.put(name, listenerWrapper);
 
         if (!sensorManager.registerListener(listenerWrapper,
                 sensor, EVENT_TIME_POLL, EVENT_TIME_POLL)) {

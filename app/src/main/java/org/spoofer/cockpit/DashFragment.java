@@ -95,7 +95,7 @@ public class DashFragment extends Fragment {
 
     private void registerViews(List<SensorView> sensorViews) {
         for (SensorView v : sensorViews) {
-            eventManager.addListener(v.getSensorNames(), v);
+            eventManager.addListener(v.getSensorName(), v);
         }
     }
     private void deregisterViews(List<SensorView> sensorViews) {

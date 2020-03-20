@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.spoofer.cockpit.views.SimpleTextView
+<org.spoofer.cockpit.views.MultiTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cockpit="http://schemas.android.com/apk/res-auto"
 
@@ -8,8 +8,10 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     cockpit:sensorName="LSM6DS3 Gyroscope"
+    cockpit:valueRef_0="@id/txtValue0"
+    cockpit:valueRef_1="@id/txtValue1"
+    cockpit:valueRef_2="@id/txtValue2"
     >
-
     <TextView
         android:id="@+id/txtValue0"
         android:layout_width="match_parent"
@@ -34,6 +36,4 @@
         android:text="VALUE 2"
         android:textAlignment="center" />
 
-
-
-</org.spoofer.cockpit.views.SimpleTextView>
+</org.spoofer.cockpit.views.MultiTextView>

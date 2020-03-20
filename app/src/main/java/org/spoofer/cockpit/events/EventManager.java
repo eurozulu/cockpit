@@ -64,28 +64,31 @@ public class EventManager {
 
     }
 
-    public void addListener(List<String> names, EventListener listener) throws IllegalArgumentException {
+    public void addListener(String name, EventListener listener) throws IllegalArgumentException {
         List<String> knownNames = getNames();
-
-        for (String name : names) {
-            List<EventListener> val = listeners.get(name);
-            if (null == val) {
-                if (!knownNames.contains(name)) {
-                    throw new IllegalArgumentException(String.format("%s is not a known sensor name"));
-                }
-                val = new ArrayList<>();
-                listeners.put(name, val);
-            }
-
-            if (!val.contains(listener))
-                val.add(listener);
+        if (!knownNames.contains(name)) {
+            throw new IllegalArgumentException(String.format("%s is not a known sensor name"));
         }
+
+        List<EventListener> val = listeners.get(name);
+        if (null == val) {
+            val = new ArrayList<>();
+            listeners.put(name, val);
+        }
+
+        if (!val.contains(listener))
+            val.add(listener);
+
     }
 
     public void removeListener(EventListener listener) {
         for (Map.Entry<String, List<EventListener>> entry : listeners.entrySet()) {
             if (!entry.getValue().contains(listener))
                 continue;
+
+            if (connected.contains(entry.getKey())) {
+                getFactoryForName(entry.getKey()).stopListening(entry.getKey());
+            }
 
             entry.getValue().remove(listener);
             if (entry.getValue().isEmpty()) {
@@ -101,7 +104,6 @@ public class EventManager {
         }
         return names;
     }
-
 
     private EventFactory getFactoryForName(String name) {
         EventFactory factory = null;

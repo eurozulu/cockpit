@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.spoofer.cockpit.views.SimpleTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cockpit="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/sensorText"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    cockpit:sensorName="LSM6DS3 Gyroscope"
+    cockpit:valueIndex="0"
+    />
