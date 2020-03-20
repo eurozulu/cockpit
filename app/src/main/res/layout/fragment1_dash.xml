@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:digimeter="http://schemas.android.com/apk/res-auto"
+    xmlns:sensorview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DashFragment">
+
+    <org.spoofer.cockpit.views.SensorViewGroup
+        android:id="@+id/meter_values"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:orientation="vertical"
+        sensorview:sensorName="MMC3416PJ Magnetometer"
+        sensorview:valueRef_0="@id/meter0"
+        sensorview:valueRef_1="@id/meter1"
+        sensorview:valueRef_2="@id/meter2">
+
+        <org.spoofer.cockpit.views.DigiMeter
+            android:id="@+id/meter0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:layout_weight="10"
+            android:minHeight="200dp"
+            digimeter:colour="@android:color/holo_red_dark"
+            digimeter:colourNegative="@android:color/holo_green_dark"
+            digimeter:invertAxes="true"
+            digimeter:orientation="horizontal"
+            digimeter:range="0"
+            digimeter:segmentCount="50"
+            digimeter:value="0"
+            digimeter:zeroOffset="0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <org.spoofer.cockpit.views.DigiMeter
+                android:id="@+id/meter1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minHeight="200dp"
+                digimeter:colour="@android:color/holo_red_dark"
+                digimeter:colourNegative="@android:color/holo_green_dark"
+                digimeter:orientation="vertical"
+                digimeter:range="0"
+                digimeter:segmentCount="50"
+                digimeter:value="0" />
+
+            <org.spoofer.cockpit.views.DigiMeter
+                android:id="@+id/meter2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minHeight="200dp"
+                digimeter:colour="@android:color/holo_red_dark"
+                digimeter:colourNegative="@android:color/holo_green_dark"
+                digimeter:orientation="vertical"
+                digimeter:range="0"
+                digimeter:segmentCount="50"
+                digimeter:value="0" />
+
+        </LinearLayout>
+    </org.spoofer.cockpit.views.SensorViewGroup>
+
+</LinearLayout>

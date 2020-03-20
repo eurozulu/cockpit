@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class DashFragment extends Fragment {
+    public static final String ARG_LAYOUT = "arg_layout";
 
     private EventManager eventManager;
     private List<SensorView> sensorViews;
@@ -36,7 +38,7 @@ public class DashFragment extends Fragment {
     private ArrayAdapter<String> sensorSelection;
 
     public DashFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -56,8 +58,15 @@ public class DashFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+        Bundle args = getArguments();
+        if (args == null)
+            args = new Bundle();
+
+        @LayoutRes
+        int layout = args.getInt(ARG_LAYOUT, R.layout.fragment1_dash);
+
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_dash, container, false);
+        View v = inflater.inflate(layout, container, false);
         if (!(v instanceof ViewGroup))
             throw new IllegalStateException("Expected dash parent view to be a ViewGroup");
         ViewGroup parent = (ViewGroup) v;
@@ -141,5 +150,13 @@ public class DashFragment extends Fragment {
         for (SensorView v : sensorViews) {
             eventManager.removeListener(v);
         }
+    }
+
+    public static DashFragment NewDashFragment(@LayoutRes int layout) {
+        Bundle b = new Bundle();
+        b.putInt(ARG_LAYOUT, layout);
+        DashFragment frag = new DashFragment();
+        frag.setArguments(b);
+        return frag;
     }
 }

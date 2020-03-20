@@ -2,6 +2,7 @@ package org.spoofer.cockpit;
 
 import android.os.Bundle;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,12 @@ import androidx.viewpager.widget.ViewPager;
 public class MainActivity extends AppCompatActivity {
 
     private static final int NUM_PAGES = 2;
+
+    @LayoutRes
+    private static final int[] dash_layouts = new int[]{
+            R.layout.fragment1_dash,
+            R.layout.fragment2_dash,
+    };
 
     private ViewPager mPager;
     private PagerAdapter pagerAdapter;
@@ -48,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         @NonNull
         public Fragment getItem(int position) {
-            return new DashFragment();
+            return DashFragment.NewDashFragment(dash_layouts[position]);
         }
 
         @Override
