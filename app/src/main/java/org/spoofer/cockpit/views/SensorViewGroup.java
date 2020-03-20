@@ -51,6 +51,13 @@ public class SensorViewGroup extends LinearLayout implements SensorView {
     }
 
     @Override
+    public void setSensorName(String sensorName) {
+        this.sensorName = sensorName;
+        invalidate();
+        requestLayout();
+    }
+
+    @Override
     public void update(Event event) {
         if (event == null)
             return;

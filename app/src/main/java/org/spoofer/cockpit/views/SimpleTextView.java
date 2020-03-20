@@ -52,6 +52,11 @@ public class SimpleTextView extends AppCompatTextView implements SensorView {
     }
 
     @Override
+    public void setSensorName(String sensorName) {
+        this.sensorName = sensorName;
+    }
+
+    @Override
     public void update(Event event) {
         if (event == null)
             return;

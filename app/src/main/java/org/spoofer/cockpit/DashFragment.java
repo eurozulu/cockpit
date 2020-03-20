@@ -85,26 +85,6 @@ public class DashFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_layout, menu);
-        MenuItem item = menu.findItem(R.id.spinner_sensor);
-        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
-        spinner.setAdapter(sensorSelection); // set the adapter to provide layout of rows and content
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), sensorSelection.getItem(position), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    @Override
     public void onDestroyView() {
         deregisterViews(sensorViews);
         sensorViews.clear();
@@ -123,6 +103,27 @@ public class DashFragment extends Fragment {
         eventManager.stopListeners();
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_layout, menu);
+        MenuItem item = menu.findItem(R.id.spinner_sensor);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        spinner.setAdapter(sensorSelection); // set the adapter to provide layout of rows and content
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(), sensorSelection.getItem(position), Toast.LENGTH_LONG).show();
+                setSensorName(sensorSelection.getItem(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
 
     private List<SensorView> findSensorViews(ViewGroup parent) {
         List<SensorView> found = new ArrayList<>();
@@ -150,6 +151,16 @@ public class DashFragment extends Fragment {
         for (SensorView v : sensorViews) {
             eventManager.removeListener(v);
         }
+    }
+
+    private void setSensorName(String name) {
+        eventManager.stopListeners();
+        deregisterViews(sensorViews);
+        for (SensorView sv : sensorViews) {
+            sv.setSensorName(name);
+        }
+        registerViews(sensorViews);
+        eventManager.startListeners();
     }
 
     public static DashFragment NewDashFragment(@LayoutRes int layout) {
