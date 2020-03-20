@@ -3,13 +3,20 @@ package org.spoofer.cockpit;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
 
 import org.spoofer.cockpit.events.EventManager;
 import org.spoofer.cockpit.views.SensorView;
@@ -25,6 +32,8 @@ public class DashFragment extends Fragment {
 
     private EventManager eventManager;
     private List<SensorView> sensorViews;
+
+    private ArrayAdapter<String> sensorSelection;
 
     public DashFragment() {
         // Required empty public constructor
@@ -45,6 +54,8 @@ public class DashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_dash, container, false);
         if (!(v instanceof ViewGroup))
@@ -53,7 +64,35 @@ public class DashFragment extends Fragment {
 
         sensorViews = findSensorViews(parent);
         registerViews(sensorViews);
+
+        List<String> names = eventManager.getNames();
+        String[] sa = new String[names.size()];
+        names.toArray(sa);
+
+        sensorSelection = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                sa);
         return parent;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_layout, menu);
+        MenuItem item = menu.findItem(R.id.spinner_sensor);
+        Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
+        spinner.setAdapter(sensorSelection); // set the adapter to provide layout of rows and content
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(), sensorSelection.getItem(position), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -75,6 +114,7 @@ public class DashFragment extends Fragment {
         eventManager.stopListeners();
     }
 
+
     private List<SensorView> findSensorViews(ViewGroup parent) {
         List<SensorView> found = new ArrayList<>();
         for (int index = 0; index < parent.getChildCount(); index++) {
@@ -86,7 +126,6 @@ public class DashFragment extends Fragment {
 
             if (v instanceof ViewGroup) {
                 found.addAll(findSensorViews((ViewGroup) v));
-                continue;
             }
             // Not a sensor view, ignore it
         }

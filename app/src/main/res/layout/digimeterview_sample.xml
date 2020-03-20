@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.spoofer.cockpit.views.DigiMeter xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:digiview="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/digiMeter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="200dp"
+    digiview:orientation="vertical"
+    digiview:segmentCount="50"
+    digiview:range="10"
+    digiview:colour="@android:color/holo_red_dark"
+    digiview:colourNegative="@android:color/holo_green_dark"
+    digiview:zeroOffset="0"
+    digiview:value="5" />

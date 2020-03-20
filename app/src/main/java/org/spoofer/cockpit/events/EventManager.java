@@ -3,6 +3,8 @@ package org.spoofer.cockpit.events;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +36,7 @@ public class EventManager {
             return;
         }
         List<EventListener> lsnrs = listeners.get(name);
-        if (lsnrs.isEmpty())
+        if (lsnrs == null || lsnrs.isEmpty())
             return;
 
         EventFactory factory = getFactoryForName(name);
@@ -49,7 +51,10 @@ public class EventManager {
     }
 
     public void stopListeners() {
-        for (String key : connected) {
+        List<String> names = Arrays.asList(new String[connected.size()]);
+        Collections.copy(names, connected);
+
+        for (String key : names) {
             stopListener(key);
         }
     }
@@ -61,13 +66,12 @@ public class EventManager {
         }
         factory.stopListening(name);
         connected.remove(name);
-
     }
 
     public void addListener(String name, EventListener listener) throws IllegalArgumentException {
         List<String> knownNames = getNames();
         if (!knownNames.contains(name)) {
-            throw new IllegalArgumentException(String.format("%s is not a known sensor name"));
+            throw new IllegalArgumentException(String.format("%s is not a known sensor name", name));
         }
 
         List<EventListener> val = listeners.get(name);
@@ -82,6 +86,8 @@ public class EventManager {
     }
 
     public void removeListener(EventListener listener) {
+        List<String> empties = new ArrayList<>();
+
         for (Map.Entry<String, List<EventListener>> entry : listeners.entrySet()) {
             if (!entry.getValue().contains(listener))
                 continue;
@@ -92,8 +98,12 @@ public class EventManager {
 
             entry.getValue().remove(listener);
             if (entry.getValue().isEmpty()) {
-                listeners.remove(entry.getKey());
+                empties.add(entry.getKey());
             }
+        }
+
+        for (String key : empties) {
+            listeners.remove(key);
         }
     }
 
@@ -104,6 +114,7 @@ public class EventManager {
         }
         return names;
     }
+
 
     private EventFactory getFactoryForName(String name) {
         EventFactory factory = null;
