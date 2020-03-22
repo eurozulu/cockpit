@@ -11,6 +11,7 @@
             <enum name="horizontal" value="1" />
         </attr>
         <attr name="zeroOffset" format="integer" />
+        <attr name="showLimits" format="boolean" />
         <attr name="invertAxes" format="boolean" />
         <attr name="segmentCount" format="integer" />
         <attr name="colour" format="color" />

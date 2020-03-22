@@ -33,7 +33,8 @@ import java.util.List;
  */
 public class DashFragment extends Fragment {
     public static final String ARG_LAYOUT = "arg_layout";
-    private static final String SELECTED_SENSOR_NAME = "cockpit.selectedSensorName";
+    private static final String PREF_SENSOR_NAME = "cockpit.selectedSensorName";
+    private static final String PREF_DASH_INDEX = "cockpit.dashIndex";
 
 
     private EventManager eventManager;
@@ -77,9 +78,9 @@ public class DashFragment extends Fragment {
             throw new IllegalStateException("Expected dash parent view to be a ViewGroup");
         ViewGroup parent = (ViewGroup) v;
 
-        selectedName = loadSelection();
+        selectedName = loadPreferences();
         if (savedInstanceState != null) {
-            selectedName = savedInstanceState.getString(SELECTED_SENSOR_NAME);
+            selectedName = savedInstanceState.getString(PREF_SENSOR_NAME);
         }
 
         sensorViews = findSensorViews(parent);
@@ -100,7 +101,7 @@ public class DashFragment extends Fragment {
     public void onDestroyView() {
         deregisterViews(sensorViews);
         sensorViews.clear();
-        saveSelection();
+        savePreferences();
         super.onDestroyView();
     }
 
@@ -121,7 +122,7 @@ public class DashFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (!TextUtils.isEmpty(selectedName)) {
-            outState.putString(SELECTED_SENSOR_NAME, selectedName);
+            outState.putString(PREF_SENSOR_NAME, selectedName);
         }
     }
 
@@ -209,22 +210,22 @@ public class DashFragment extends Fragment {
             eventManager.startListeners();
     }
 
-    private void saveSelection() {
+    private void savePreferences() {
         if (TextUtils.isEmpty(selectedName))
             return;
 
         SharedPreferences sp = getContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
-        String selected = sp.getString(SELECTED_SENSOR_NAME, "");
+        String selected = sp.getString(PREF_SENSOR_NAME, "");
         if (sensorSelection.equals(selected))
             return;
 
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(SELECTED_SENSOR_NAME, selectedName).commit();
+        editor.putString(PREF_SENSOR_NAME, selectedName).commit();
     }
 
-    private String loadSelection() {
+    private String loadPreferences() {
         SharedPreferences sp = getContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
-        return sp.getString(SELECTED_SENSOR_NAME, "");
+        return sp.getString(PREF_SENSOR_NAME, "");
     }
 
 

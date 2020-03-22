@@ -4,6 +4,9 @@
         <attr name="level" />
         <attr name="range" />
         <attr name="needleImage" format="reference" />
+        <attr name="needlePivotX" format="float" />
+        <attr name="needlePivotY" format="float" />
+        <attr name="needleOffset" format="float" />
         <attr name="startDegree" format="float" />
         <attr name="endDegree" format="float" />
         <attr name="zeroDegree" format="float" />

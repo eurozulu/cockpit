@@ -21,7 +21,8 @@ public class EventManager {
     public EventManager(Context context) {
         super();
         factories = new EventFactory[]{
-                new AndroidSensorFactory(context)
+                new AndroidSensorFactory(context),
+                new AndroidGPSFactory(context),
         };
     }
 
