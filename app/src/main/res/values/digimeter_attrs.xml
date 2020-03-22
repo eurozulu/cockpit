@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DigiMeter">
+        <attr name="level" />
+        <attr name="range" />
+        <attr name="minHeight" />
+        <attr name="minWidth" />
+
         <attr name="orientation" format="enum">
             <enum name="vertical" value="0" />
             <enum name="horizontal" value="1" />
         </attr>
-        <attr name="range" format="integer" />
-        <attr name="value" format="integer" />
         <attr name="zeroOffset" format="integer" />
         <attr name="invertAxes" format="boolean" />
-        <attr name="minHeight" format="dimension" />
-        <attr name="minWidth" format="dimension" />
         <attr name="segmentCount" format="integer" />
         <attr name="colour" format="color" />
         <attr name="colourNegative" format="color" />

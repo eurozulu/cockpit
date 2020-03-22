@@ -32,7 +32,7 @@
             digimeter:orientation="horizontal"
             digimeter:range="0"
             digimeter:segmentCount="50"
-            digimeter:value="0"
+            digimeter:level="0"
             digimeter:zeroOffset="0" />
 
         <LinearLayout
@@ -50,9 +50,9 @@
                 digimeter:colour="@android:color/holo_red_dark"
                 digimeter:colourNegative="@android:color/holo_green_dark"
                 digimeter:orientation="vertical"
-                digimeter:range="0"
+                digimeter:invertAxes="true"
                 digimeter:segmentCount="50"
-                digimeter:value="0" />
+                digimeter:level="0" />
 
             <org.spoofer.cockpit.views.DigiMeter
                 android:id="@+id/meter2"
@@ -65,7 +65,7 @@
                 digimeter:orientation="vertical"
                 digimeter:range="0"
                 digimeter:segmentCount="50"
-                digimeter:value="0" />
+                digimeter:level="0" />
 
         </LinearLayout>
     </org.spoofer.cockpit.views.SensorViewGroup>

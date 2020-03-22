@@ -12,4 +12,4 @@
     digiview:colour="@android:color/holo_red_dark"
     digiview:colourNegative="@android:color/holo_green_dark"
     digiview:zeroOffset="0"
-    digiview:value="5" />
+    digiview:level="5" />

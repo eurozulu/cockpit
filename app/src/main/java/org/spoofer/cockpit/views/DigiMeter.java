@@ -9,6 +9,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
@@ -17,16 +18,16 @@ import org.spoofer.cockpit.R;
 
 import java.io.Serializable;
 
-public class DigiMeter extends View implements ValueView {
+public class DigiMeter extends View implements LevelView {
 
     @ColorInt
     private static final int DEFAULT_COLOUR = Color.BLUE;
     private static final int DEFAULT_SEGMENT_COUNT = 10;
 
-    private int range;
+    private transient float level;
     private Autorange autoRange;
-    private int zeroOffset;
 
+    private int zeroOffset;
     private boolean isHorizontal;
     private boolean isInverted;
 
@@ -39,8 +40,6 @@ public class DigiMeter extends View implements ValueView {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private final Object lock = new Object();
-    private transient int value;
 
     public DigiMeter(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -58,73 +57,122 @@ public class DigiMeter extends View implements ValueView {
         TypedArray taSegment = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DigiMeter,
                 defStyleAttr, defStyleRes);
         try {
-            int minHeight = taSegment.getDimensionPixelSize(R.styleable.DigiMeter_minHeight, 0);
-            setMinimumHeight(minHeight);
-            int minWidth = taSegment.getDimensionPixelSize(R.styleable.DigiMeter_minWidth, 0);
-            setMinimumWidth(minWidth);
+            setLevel(taSegment.getFloat(R.styleable.DigiMeter_level, 0));
+            setRange(taSegment.getInt(R.styleable.DigiMeter_range, 0));
 
-            segmentCount = taSegment.getInt(R.styleable.DigiMeter_segmentCount, DEFAULT_SEGMENT_COUNT);
-            range = taSegment.getInt(R.styleable.DigiMeter_range, 0);
-            if (range == 0) {
-                autoRange = new Autorange();
-            }
+            setZeroOffset(taSegment.getInt(R.styleable.DigiMeter_zeroOffset, 0));
+            setSegmentCount(taSegment.getInt(R.styleable.DigiMeter_segmentCount, DEFAULT_SEGMENT_COUNT));
 
-            value = taSegment.getInt(R.styleable.DigiMeter_value, 0);
-            zeroOffset = taSegment.getInt(R.styleable.DigiMeter_zeroOffset, 0);
+            setColor(taSegment.getColor(R.styleable.DigiMeter_colour, DEFAULT_COLOUR));
+            setColorNegative(taSegment.getColor(R.styleable.DigiMeter_colourNegative, DEFAULT_COLOUR));
 
             isHorizontal = taSegment.getBoolean(R.styleable.DigiMeter_orientation, false);
             isInverted = taSegment.getBoolean(R.styleable.DigiMeter_invertAxes, false);
 
-            color = taSegment.getColor(R.styleable.DigiMeter_colour, DEFAULT_COLOUR);
-            colorNegative = taSegment.getColor(R.styleable.DigiMeter_colourNegative, DEFAULT_COLOUR);
-
         } finally {
             taSegment.recycle();
         }
+
+        setOnLongClickListener(v -> {
+            boolean isLevelView = v instanceof LevelView;
+            if (!isLevelView)
+                return false;
+            PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.popup_recalibrate:
+                        ((LevelView) v).setRange(0);
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            popupMenu.show();
+            return true;
+        });
     }
 
+    public int getSegmentCount() {
+        return segmentCount;
+    }
 
-    public int getValue() {
-        synchronized (lock) {
-            return value;
+    public void setSegmentCount(int segmentCount) {
+        this.segmentCount = segmentCount;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getColorNegative() {
+        return colorNegative;
+    }
+
+    public void setColorNegative(int colorNegative) {
+        this.colorNegative = colorNegative;
+    }
+
+    public int getZeroOffset() {
+        return zeroOffset;
+    }
+
+    public void setZeroOffset(int zeroOffset) {
+        this.zeroOffset = zeroOffset;
+    }
+
+    @Override
+    public void setRange(float range) {
+        autoRange = new Autorange();
+        if (range != 0) {
+            autoRange.setFixedRange(range);
         }
     }
 
-    public void setValue(float value) {
-        setValue((int) value);
+    @Override
+    public float getRange() {
+        return autoRange.getRange();
     }
 
-    public void setValue(int value) {
-        synchronized (lock) {
-            if (autoRange != null) {
-                autoRange.setRange(value);
-                range = autoRange.getRangeSize();
-            }
-            if (this.value != value) {
-                this.value = value;
-                invalidate();
-            }
+
+    @Override
+    public float getLevel() {
+        return level;
+    }
+
+    @Override
+    public boolean setLevel(float level) {
+        boolean changed = false;
+
+        if (this.level != level) {
+            changed = true;
+            autoRange.setRange(level);
+            this.level = level;
+            invalidate();
         }
+        return changed;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        float value = getValue();
-
         if (isHorizontal)
-            drawHorizontal(value, canvas);
+            drawHorizontal(canvas);
         else
-            drawVertical(value, canvas);
+            drawVertical(canvas);
     }
 
 
-    private void drawHorizontal(float value, Canvas canvas) {
+    private void drawHorizontal(Canvas canvas) {
         int width = getWidth() - (getPaddingStart() + getPaddingEnd());
         int start = getPaddingTop();
         int end = getBottom() - getPaddingBottom();
 
-        float scaleX = value / range;
+        float scaleX = getLevel() / getRange();
         float val = width * scaleX;
 
         int segmentWidth = width / segmentCount;
@@ -148,12 +196,12 @@ public class DigiMeter extends View implements ValueView {
         }
     }
 
-    private void drawVertical(float value, Canvas canvas) {
+    private void drawVertical(Canvas canvas) {
         int height = getHeight() - (getPaddingTop() + getPaddingBottom());
         int start = getPaddingLeft();
         int end = getRight() - getPaddingRight();
 
-        float scaleY = value / range;
+        float scaleY = getLevel() / getRange();
         float val = height * scaleY;
 
         int segmentHeight = height / segmentCount;
@@ -182,8 +230,7 @@ public class DigiMeter extends View implements ValueView {
         Parcelable superState = super.onSaveInstanceState();
         // wrap up superstate in our own state
         SavedState ss = new SavedState(superState);
-        ss.value = value;
-        ss.range = range;
+        ss.level = getLevel();
         ss.autoRange = autoRange;
 
         return ss;
@@ -194,14 +241,12 @@ public class DigiMeter extends View implements ValueView {
         SavedState ss = (SavedState) state;
 
         super.onRestoreInstanceState(ss.getSuperState());
-        value = ss.value;
-        range = ss.range;
+        level = ss.level;
         autoRange = (Autorange) ss.autoRange;
     }
 
     private static class SavedState extends BaseSavedState {
-        int value;
-        int range;
+        float level;
         Serializable autoRange;
 
         SavedState(Parcelable superState) {
@@ -210,17 +255,15 @@ public class DigiMeter extends View implements ValueView {
 
         private SavedState(Parcel in) {
             super(in);
-            value = in.readInt();
+            level = in.readFloat();
             autoRange = in.readSerializable();
-            range = in.readInt();
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
-            out.writeInt(value);
+            out.writeFloat(level);
             out.writeSerializable(autoRange);
-            out.writeInt(range);
         }
 
         public static final Creator<SavedState> CREATOR

@@ -2,7 +2,9 @@ package org.spoofer.cockpit;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,10 +33,13 @@ import java.util.List;
  */
 public class DashFragment extends Fragment {
     public static final String ARG_LAYOUT = "arg_layout";
+    private static final String SELECTED_SENSOR_NAME = "cockpit.selectedSensorName";
+
 
     private EventManager eventManager;
     private List<SensorView> sensorViews;
 
+    private String selectedName;
     private ArrayAdapter<String> sensorSelection;
 
     public DashFragment() {
@@ -58,6 +63,7 @@ public class DashFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         setHasOptionsMenu(true);
+
         Bundle args = getArguments();
         if (args == null)
             args = new Bundle();
@@ -70,6 +76,11 @@ public class DashFragment extends Fragment {
         if (!(v instanceof ViewGroup))
             throw new IllegalStateException("Expected dash parent view to be a ViewGroup");
         ViewGroup parent = (ViewGroup) v;
+
+        selectedName = loadSelection();
+        if (savedInstanceState != null) {
+            selectedName = savedInstanceState.getString(SELECTED_SENSOR_NAME);
+        }
 
         sensorViews = findSensorViews(parent);
         registerViews(sensorViews);
@@ -84,10 +95,12 @@ public class DashFragment extends Fragment {
         return parent;
     }
 
+
     @Override
     public void onDestroyView() {
         deregisterViews(sensorViews);
         sensorViews.clear();
+        saveSelection();
         super.onDestroyView();
     }
 
@@ -105,17 +118,27 @@ public class DashFragment extends Fragment {
 
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (!TextUtils.isEmpty(selectedName)) {
+            outState.putString(SELECTED_SENSOR_NAME, selectedName);
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_layout, menu);
-        MenuItem item = menu.findItem(R.id.spinner_sensor);
+        MenuItem item = menu.findItem(R.id.menu_sensor_select);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(item);
         spinner.setAdapter(sensorSelection); // set the adapter to provide layout of rows and content
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), sensorSelection.getItem(position), Toast.LENGTH_LONG).show();
-                setSensorName(sensorSelection.getItem(position));
+                selectedName = sensorSelection.getItem(position);
+                Toast.makeText(getContext(), selectedName, Toast.LENGTH_LONG).show();
+                setSensorName(selectedName);
             }
 
             @Override
@@ -123,6 +146,23 @@ public class DashFragment extends Fragment {
 
             }
         });
+        // pre-select any previous selection
+        if (!TextUtils.isEmpty(selectedName)) {
+            int pos = getItemPosition(spinner, selectedName);
+            if (pos >= 0)
+                spinner.setSelection(pos, false);
+        }
+    }
+
+    private int getItemPosition(AdapterView<?> view, String item) {
+        int index = -1;
+        for (int i = 0; i < view.getCount(); i++) {
+            if (item.equals(view.getItemAtPosition(i))) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
     private List<SensorView> findSensorViews(ViewGroup parent) {
@@ -147,6 +187,7 @@ public class DashFragment extends Fragment {
             eventManager.addListener(v.getSensorName(), v);
         }
     }
+
     private void deregisterViews(List<SensorView> sensorViews) {
         for (SensorView v : sensorViews) {
             eventManager.removeListener(v);
@@ -154,14 +195,38 @@ public class DashFragment extends Fragment {
     }
 
     private void setSensorName(String name) {
-        eventManager.stopListeners();
+        boolean isStarted = eventManager.isStarted();
+        if (isStarted)
+            eventManager.stopListeners();
+
         deregisterViews(sensorViews);
         for (SensorView sv : sensorViews) {
             sv.setSensorName(name);
         }
         registerViews(sensorViews);
-        eventManager.startListeners();
+
+        if (isStarted)
+            eventManager.startListeners();
     }
+
+    private void saveSelection() {
+        if (TextUtils.isEmpty(selectedName))
+            return;
+
+        SharedPreferences sp = getContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
+        String selected = sp.getString(SELECTED_SENSOR_NAME, "");
+        if (sensorSelection.equals(selected))
+            return;
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(SELECTED_SENSOR_NAME, selectedName).commit();
+    }
+
+    private String loadSelection() {
+        SharedPreferences sp = getContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
+        return sp.getString(SELECTED_SENSOR_NAME, "");
+    }
+
 
     public static DashFragment NewDashFragment(@LayoutRes int layout) {
         Bundle b = new Bundle();

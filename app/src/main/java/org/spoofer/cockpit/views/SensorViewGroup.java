@@ -84,8 +84,8 @@ public class SensorViewGroup extends LinearLayout implements SensorView {
         else if (v instanceof ProgressBar)
             ((ProgressBar) v).setProgress((int) value);
 
-        else if (v instanceof ValueView)
-            ((ValueView) v).setValue(value);
+        else if (v instanceof LevelView)
+            ((LevelView) v).setLevel(value);
     }
 
     @IdRes
@@ -95,16 +95,6 @@ public class SensorViewGroup extends LinearLayout implements SensorView {
         ids[0] = ta.getResourceId(R.styleable.SensorView_valueRef_0, 0);
         ids[1] = ta.getResourceId(R.styleable.SensorView_valueRef_1, 0);
         ids[2] = ta.getResourceId(R.styleable.SensorView_valueRef_2, 0);
-
-        // Check at least one has id
-        int i = 0;
-        for (; i < ids.length; i++) {
-            if (ids[i] == 0)
-                continue;
-            break;
-        }
-        if (i >= ids.length)
-            throw new IllegalStateException("must have at least one value ref to a textview");
 
         return ids;
     }

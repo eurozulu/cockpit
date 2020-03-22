@@ -25,6 +25,10 @@ public class EventManager {
         };
     }
 
+    public boolean isStarted() {
+        return !connected.isEmpty();
+    }
+
     public void startListeners() {
         for (String key : listeners.keySet()) {
             startListener(key);

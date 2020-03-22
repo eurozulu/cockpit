@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.spoofer.cockpit.views.Dialview xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dialview="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/dialView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    dialview:needleImage="@drawable/needle"
+    dialview:range="100"
+    dialview:level="25" />

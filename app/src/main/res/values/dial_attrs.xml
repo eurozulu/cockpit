@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Dialview">
+        <attr name="level" />
+        <attr name="range" />
+        <attr name="needleImage" format="reference" />
+        <attr name="startDegree" format="float" />
+        <attr name="endDegree" format="float" />
+        <attr name="zeroDegree" format="float" />
+    </declare-styleable>
+</resources>

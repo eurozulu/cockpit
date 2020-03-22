@@ -13,12 +13,11 @@ import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int NUM_PAGES = 2;
-
     @LayoutRes
     private static final int[] dash_layouts = new int[]{
             R.layout.fragment1_dash,
             R.layout.fragment2_dash,
+            R.layout.fragment3_dash,
     };
 
     private ViewPager mPager;
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return dash_layouts.length;
         }
     }
 }

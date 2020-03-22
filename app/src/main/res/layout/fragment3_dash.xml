@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dialview="http://schemas.android.com/apk/res-auto"
+    xmlns:sensorview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DashFragment">
+
+    <org.spoofer.cockpit.views.SensorViewGroup
+        android:id="@+id/meter_values"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:orientation="horizontal"
+        sensorview:sensorName="MMC3416PJ Magnetometer"
+        sensorview:valueRef_0="@id/dial0"
+        sensorview:valueRef_1="@id/dial1"
+        sensorview:valueRef_2="@id/dial2">
+
+        <org.spoofer.cockpit.views.Dialview
+            android:id="@+id/dial0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_weight="1"
+            dialview:needleImage="@drawable/needle"
+            dialview:level="0"
+            dialview:startDegree="280"
+            dialview:endDegree="80" />
+
+        <org.spoofer.cockpit.views.Dialview
+            android:id="@+id/dial1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/darker_gray"
+            android:layout_weight="1"
+            dialview:needleImage="@drawable/needle"
+            dialview:level="0" />
+
+        <org.spoofer.cockpit.views.Dialview
+            android:id="@+id/dial2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_weight="1"
+            dialview:needleImage="@drawable/needle"
+            dialview:level="0" />
+
+    </org.spoofer.cockpit.views.SensorViewGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+</LinearLayout>
