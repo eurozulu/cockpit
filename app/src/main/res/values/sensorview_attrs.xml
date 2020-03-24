@@ -7,5 +7,7 @@
     <attr name="valueRef_0" format="reference" />
     <attr name="valueRef_1" format="reference" />
     <attr name="valueRef_2" format="reference" />
+    <attr name="valueRef_3" format="reference" />
+    <attr name="valueRef_4" format="reference" />
 </declare-styleable>
 </resources>

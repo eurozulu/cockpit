@@ -1,4 +1,4 @@
-package org.spoofer.cockpit.views;
+package org.spoofer.cockpit.views.sensorviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;

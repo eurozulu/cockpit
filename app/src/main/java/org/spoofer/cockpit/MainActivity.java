@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import org.spoofer.cockpit.dashboards.DashFragment;
 import org.spoofer.cockpit.events.AndroidGPSFactory;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package org.spoofer.cockpit.views;
+package org.spoofer.cockpit.views.sensorviews;
 
 import org.spoofer.cockpit.events.EventListener;
 

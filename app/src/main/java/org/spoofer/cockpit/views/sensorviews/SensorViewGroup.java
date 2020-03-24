@@ -1,4 +1,4 @@
-package org.spoofer.cockpit.views;
+package org.spoofer.cockpit.views.sensorviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import org.spoofer.cockpit.R;
 import org.spoofer.cockpit.events.Event;
+import org.spoofer.cockpit.views.LevelView;
 
 public class SensorViewGroup extends LinearLayout implements SensorView {
 
@@ -91,11 +92,12 @@ public class SensorViewGroup extends LinearLayout implements SensorView {
     @IdRes
     private int[] getValueViews(TypedArray ta) {
         @IdRes
-        int[] ids = new int[3];
+        int[] ids = new int[5];
         ids[0] = ta.getResourceId(R.styleable.SensorView_valueRef_0, 0);
         ids[1] = ta.getResourceId(R.styleable.SensorView_valueRef_1, 0);
         ids[2] = ta.getResourceId(R.styleable.SensorView_valueRef_2, 0);
-
+        ids[3] = ta.getResourceId(R.styleable.SensorView_valueRef_3, 0);
+        ids[4] = ta.getResourceId(R.styleable.SensorView_valueRef_4, 0);
         return ids;
     }
 }

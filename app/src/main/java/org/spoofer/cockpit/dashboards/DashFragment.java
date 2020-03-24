@@ -1,4 +1,4 @@
-package org.spoofer.cockpit;
+package org.spoofer.cockpit.dashboards;
 
 
 import android.content.Context;
@@ -21,8 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
+import org.spoofer.cockpit.R;
 import org.spoofer.cockpit.events.EventManager;
-import org.spoofer.cockpit.views.SensorView;
+import org.spoofer.cockpit.views.sensorviews.SensorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class DashFragment extends Fragment {
+
     public static final String ARG_LAYOUT = "arg_layout";
     private static final String PREF_SENSOR_NAME = "cockpit.selectedSensorName";
     private static final String PREF_DASH_INDEX = "cockpit.dashIndex";
