@@ -3,11 +3,5 @@
 <declare-styleable name="SensorView">
     <attr name="sensorName" format="string" />
     <attr name="sensorTime" format="integer" />
-    <attr name="valueIndex" format="integer" />
-    <attr name="valueRef_0" format="reference" />
-    <attr name="valueRef_1" format="reference" />
-    <attr name="valueRef_2" format="reference" />
-    <attr name="valueRef_3" format="reference" />
-    <attr name="valueRef_4" format="reference" />
 </declare-styleable>
 </resources>

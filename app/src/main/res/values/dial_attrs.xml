@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Dialview">
+        <attr name="sensorName" />
+        <attr name="valueIndex" />
         <attr name="level" />
-        <attr name="range" />
+        <attr name="multiplier" />
         <attr name="needleImage" format="reference" />
         <attr name="needlePivotX" format="float" />
         <attr name="needlePivotY" format="float" />

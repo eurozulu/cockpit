@@ -1,10 +1,9 @@
-package org.spoofer.cockpit.views.sensorviews;
+package org.spoofer.cockpit.sensorviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
@@ -27,13 +26,10 @@ public class SimpleTextView extends AppCompatTextView implements SensorView {
     public SimpleTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SensorView, defStyleAttr, 0);
+        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SensorViewValue, defStyleAttr, 0);
         try {
             sensorName = ta.getString(R.styleable.SensorView_sensorName);
-            if (TextUtils.isEmpty(sensorName))
-                throw new IllegalStateException("must have a sensor name");
-
-            valueIndex = ta.getInt(R.styleable.SensorView_valueIndex, 0);
+            valueIndex = ta.getInt(R.styleable.SensorViewValue_valueIndex, 0);
             if (valueIndex < 0)
                 valueIndex = Math.abs(valueIndex);
 
@@ -51,10 +47,6 @@ public class SimpleTextView extends AppCompatTextView implements SensorView {
         return sensorName;
     }
 
-    @Override
-    public void setSensorName(String sensorName) {
-        this.sensorName = sensorName;
-    }
 
     @Override
     public void update(Event event) {

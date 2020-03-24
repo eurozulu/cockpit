@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.spoofer.cockpit.views.sensorviews.SimpleTextView
+<org.spoofer.cockpit.sensorviews.SimpleTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cockpit="http://schemas.android.com/apk/res-auto"
 

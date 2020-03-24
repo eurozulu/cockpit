@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.spoofer.cockpit.views.sensorviews.SensorViewGroup
+<org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sensorview="http://schemas.android.com/apk/res-auto"
 
@@ -36,4 +36,4 @@
         android:text="VALUE 2"
         android:textAlignment="center" />
 
-</org.spoofer.cockpit.views.sensorviews.SensorViewGroup>
+</org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup>

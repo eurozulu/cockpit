@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".dashboards.DashFragment">
 
-    <org.spoofer.cockpit.views.sensorviews.SensorViewGroup
+    <org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup
         android:id="@+id/sensorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,9 +45,9 @@
             android:text="VALUE 2"
             android:textAlignment="center"
             android:textSize="10pt" />
-    </org.spoofer.cockpit.views.sensorviews.SensorViewGroup>
+    </org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup>
 
-    <org.spoofer.cockpit.views.sensorviews.SensorViewGroup
+    <org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup
         android:id="@+id/meter_values"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,6 +107,6 @@
                 digimeter:level="0" />
 
         </LinearLayout>
-    </org.spoofer.cockpit.views.sensorviews.SensorViewGroup>
+    </org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup>
 
 </LinearLayout>

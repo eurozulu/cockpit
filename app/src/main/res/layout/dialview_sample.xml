@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.spoofer.cockpit.views.Dialview xmlns:android="http://schemas.android.com/apk/res/android"
+<org.spoofer.cockpit.sensorviews.Dialview xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dialview="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/dialView"

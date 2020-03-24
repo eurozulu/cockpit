@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SensorViewValue">
+        <attr name="sensorName" />
+        <attr name="valueIndex" format="integer" />
+        <attr name="level" format="float" />
+        <attr name="multiplier" format="float" />
+    </declare-styleable>
+</resources>

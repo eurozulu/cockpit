@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".dashboards.DashFragment">
 
-    <org.spoofer.cockpit.views.sensorviews.SensorViewGroup
+    <org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup
         android:id="@+id/meter_values"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             dialview:startDegree="0"
             dialview:endDegree="180" />
         </LinearLayout>
-    </org.spoofer.cockpit.views.sensorviews.SensorViewGroup>
+    </org.spoofer.cockpit.sensorviews.sensorviews.SensorViewGroup>
 
 
 </LinearLayout>

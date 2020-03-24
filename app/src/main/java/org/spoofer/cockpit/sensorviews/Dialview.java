@@ -1,4 +1,4 @@
-package org.spoofer.cockpit.views;
+package org.spoofer.cockpit.sensorviews;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,13 +7,23 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RotateDrawable;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 
 import org.spoofer.cockpit.R;
+import org.spoofer.cockpit.events.Event;
 
-public class Dialview extends BaseLevelView {
+public class Dialview extends View implements SensorView {
+
+    private String sensorName;
+    private int valueIndex;
+
+    @IntRange(from = 0, to = 10000)
+    private int level;
+    private float multiplier;
 
     @DrawableRes
     private int needleImgId;
@@ -38,6 +48,13 @@ public class Dialview extends BaseLevelView {
 
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Dialview, defStyleAttr, defStyleRes);
         try {
+            sensorName = ta.getString(R.styleable.Dialview_sensorName);
+            valueIndex = ta.getInt(R.styleable.Dialview_valueIndex, 0);
+            if (valueIndex < 0)
+                valueIndex = Math.abs(valueIndex);
+
+            multiplier = ta.getFloat(R.styleable.Dialview_multiplier, 1);
+
             setStartDegree(ta.getFloat(R.styleable.Dialview_startDegree, 0));
             setEndDegree(ta.getFloat(R.styleable.Dialview_endDegree, 360));
 
@@ -51,6 +68,51 @@ public class Dialview extends BaseLevelView {
         } finally {
             ta.recycle();
         }
+    }
+
+    public int getValueIndex() {
+        return valueIndex;
+    }
+
+    @Override
+    public String getSensorName() {
+        return sensorName;
+    }
+
+    @Override
+    public void update(Event event) {
+        if (event == null ||
+                event.getValues() == null ||
+                event.getValues().length < getValueIndex())
+            return;
+
+        int val = (int) (event.getValues()[valueIndex] * multiplier);
+        if (val < 0)
+            val = 0;
+        else if (val > 10000)
+            val = 10000;
+
+        setLevel(val);
+    }
+
+    @IntRange(from = 0, to = 10000)
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(@IntRange(from = 0, to = 10000) int level) {
+        if (this.level == level)
+            return;
+        this.level = level;
+        invalidate();
+    }
+
+    public float getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(float multiplier) {
+        this.multiplier = multiplier;
     }
 
     public int getNeedleImgId() {
@@ -118,10 +180,6 @@ public class Dialview extends BaseLevelView {
         super.onDraw(canvas);
         if (needleDrawable == null)
             return;
-
-        float valueScale = (getLevel() + Math.abs(autoRange.getLowerLimit())) / getRange();
-        int val = (int) (MAX_LEVEL_VALUE * valueScale);
-
         Rect clip = new Rect();
         clip.left = getPaddingLeft();
         clip.right = getWidth() - getPaddingRight();
@@ -137,11 +195,7 @@ public class Dialview extends BaseLevelView {
             clip.left += offset;
             clip.right -= offset;
         }
-
-        if (needleOffset != 0)
-            val -= (MAX_LEVEL_VALUE / (360 / needleOffset));
-
-        needleDrawable.setLevel(val);
+        needleDrawable.setLevel(getLevel());
         needleDrawable.setBounds(clip);
         needleDrawable.draw(canvas);
     }

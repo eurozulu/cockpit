@@ -1,4 +1,4 @@
-package org.spoofer.cockpit.views;
+package org.spoofer.cockpit.sensorviews;
 
 import java.io.Serializable;
 
@@ -22,15 +22,22 @@ public class Autorange implements Serializable {
         return fixedRange != null ? fixedRange.floatValue() : upperLimit + Math.abs(lowerLimit);
     }
 
-    // setFixedRange locks the given range.  Setting to zero will revert to auto range.
-    public void setFixedRange(float value) {
-        this.fixedRange = value != 0 ? value : null;
+    public void setRange(float range) {
+        if (range == 0) {
+        } else {
+            fixedRange = new Float(range);
+        }
     }
 
-    // setRange will add the given value to the current range.
-    // if given is less than lower limit, it becomes lower limit
-    // if given greater than upper limit, it becomes upper limit
-    public void setRange(float value) {
+
+    /**
+     * Update the curent range with the given value.
+     * if given is less than lower limit, it becomes lower limit
+     * if given greater than upper limit, it becomes upper limit
+     *
+     * @param value
+     */
+    public void updateRange(float value) {
         if (value < lowerLimit)
             lowerLimit = value;
         else if (value > upperLimit)

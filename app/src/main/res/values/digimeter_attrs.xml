@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="DigiMeter">
+        <attr name="sensorName" />
+        <attr name="valueIndex" />
+
         <attr name="level" />
-        <attr name="range" />
         <attr name="minHeight" />
         <attr name="minWidth" />
 
@@ -10,6 +12,7 @@
             <enum name="vertical" value="0" />
             <enum name="horizontal" value="1" />
         </attr>
+
         <attr name="zeroOffset" format="integer" />
         <attr name="showLimits" format="boolean" />
         <attr name="invertAxes" format="boolean" />

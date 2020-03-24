@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.spoofer.cockpit.views.DigiMeter xmlns:android="http://schemas.android.com/apk/res/android"
+<org.spoofer.cockpit.sensorviews.DigiMeter xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:digiview="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/digiMeter"
