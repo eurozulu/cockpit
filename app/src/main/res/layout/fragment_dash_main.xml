@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dialview="http://schemas.android.com/apk/res-auto"
+    xmlns:sensorview="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".dashboards.DashFragment">
+
+    <org.spoofer.cockpit.sensorviews.Dialview
+        android:id="@+id/main_dial"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:background="@drawable/speedometer_dial"
+        android:orientation="horizontal"
+        dialview:endDegree="180"
+        dialview:needleImage="@drawable/needle"
+        dialview:needleOffset="-180"
+        dialview:needlePivotY="0.775"
+        dialview:sensorName="gps_speed"
+        dialview:valueIndex="0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <org.spoofer.cockpit.sensorviews.DigiMeter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            sensorview:sensorName="Gravity"
+            sensorview:valueIndex="0" />
+
+        <org.spoofer.cockpit.sensorviews.SimpleTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textSize="12pt"
+            android:text="GRAVITY_1"
+            sensorview:sensorName="Gravity"
+            sensorview:valueIndex="1" />
+
+        <org.spoofer.cockpit.sensorviews.SimpleTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textAlignment="center"
+            android:textSize="12pt"
+            android:text="GRAVITY_2"
+            sensorview:sensorName="Gravity"
+            sensorview:valueIndex="2" />
+    </LinearLayout>
+</LinearLayout>

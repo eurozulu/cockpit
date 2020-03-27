@@ -1,10 +1,14 @@
 package org.spoofer.cockpit;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -18,14 +22,11 @@ import androidx.viewpager.widget.ViewPager;
 import org.spoofer.cockpit.dashboards.DashFragment;
 import org.spoofer.cockpit.events.AndroidGPSFactory;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
-    @LayoutRes
-    private static final int[] dash_layouts = new int[]{
-            R.layout.fragment1_dash,
-            R.layout.fragment2_dash,
-            R.layout.fragment3_dash,
-    };
+    private static final String PREF_DASH_INDEX = "cockpit.dash_index";
 
     private ViewPager mPager;
     private PagerAdapter pagerAdapter;
@@ -68,6 +69,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadPreferences();
+    }
+
+    @Override
+    protected void onPause() {
+        savePreferences();
+        super.onPause();
+    }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         private ScreenSlidePagerAdapter(FragmentManager fm, int behavior) {
@@ -85,4 +97,49 @@ public class MainActivity extends AppCompatActivity {
             return dash_layouts.length;
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem menuItem = menu.findItem(R.id.menu_dashboard_select);
+        menuItem.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menu_dashboard_select:
+                    openSelectDashboard();
+                    return true;
+
+                case R.id.menu_dashboard_settings:
+                    showSettings();
+                    return true;
+
+                default:
+                    return false;
+            }
+        });
+        return true;
+    }
+
+    private void loadDashLayout(String fileName) throws IOException {
+        XmlResourceParser parser = getApplicationContext().getAssets().openXmlResourceParser(fileName);
+
+    }
+
+    private void loadPreferences() {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
+        int dashIndex = sp.getInt(PREF_DASH_INDEX, -1);
+        if (dashIndex >= 0 && dashIndex < mPager.getAdapter().getCount())
+            mPager.setCurrentItem(dashIndex, false);
+    }
+
+    private void savePreferences() {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("cockpit", Context.MODE_PRIVATE);
+        int dashIndex = sp.getInt(PREF_DASH_INDEX, -1);
+        if (dashIndex == mPager.getCurrentItem())
+            return;
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(PREF_DASH_INDEX, mPager.getCurrentItem()).commit();
+    }
+
 }

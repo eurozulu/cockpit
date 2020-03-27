@@ -24,13 +24,13 @@ import java.util.List;
  */
 public class DashFragment extends Fragment {
 
-    public static final String ARG_LAYOUT = "arg_layout";
+    public static final String ARG_LAYOUT_NAME = "arg_layout_name";
+
     @LayoutRes
-    public static final int DEFAULT_DASH_LAYOUT = R.layout.fragment_dash;
+    private static final int DASHBOARD_LAYOUT_BASE = R.layout.fragment_dash;
 
     private EventManager eventManager;
     private List<SensorView> sensorViews;
-
 
     public DashFragment() {
     }
@@ -54,20 +54,13 @@ public class DashFragment extends Fragment {
         if (args == null)
             args = new Bundle();
 
-        @LayoutRes
-        int layout = args.getInt(ARG_LAYOUT, DEFAULT_DASH_LAYOUT);
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(layout, container, false);
-        if (!(v instanceof ViewGroup))
-            throw new IllegalStateException("Expected dash parent view to be a ViewGroup");
-        ViewGroup parent = (ViewGroup) v;
-
+        String layout = args.getString(ARG_LAYOUT_NAME);
+        ViewGroup parent = loadDashParent(layout, inflater);
         sensorViews = findSensorViews(parent);
         registerViews(sensorViews);
 
         return parent;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -86,6 +79,11 @@ public class DashFragment extends Fragment {
     public void onPause() {
         super.onPause();
         eventManager.stopListeners();
+    }
+
+
+    private ViewGroup loadDashParent(String name, LayoutInflater inflater) {
+
     }
 
 
